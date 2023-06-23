@@ -1,23 +1,29 @@
-#import library
 import speech_recognition as sr
 
-# Initialize recognizer class (for recognizing the speech)
-r = sr.Recognizer()
+def speech_to_text(file_path):
+    # Create a recognizer object
+    recognizer = sr.Recognizer()
 
-# Reading Audio file as source
-# listening the audio file and store in audio_text variable
+    # Load the audio file
+    with sr.AudioFile(file_path) as source:
+        # Read the audio data from the file
+        audio_data = recognizer.record(source)
 
-with sr.AudioFile('I-dont-know.wav') as source:
-    
-    audio_text = r.listen(source)
-    
-# recoginize_() method will throw a request error if the API is unreachable, hence using exception handling
-    try:
-        
-        # using google speech recognition
-        text = r.recognize_google(audio_text)
-        print('Converting audio transcripts into text ...')
-        print(text)
-     
-    except:
-         print('Sorry.. run again...')
+        try:
+            # Convert speech to text
+            text = recognizer.recognize_google(audio_data, language='hi-In')
+            return text
+        except sr.UnknownValueError:
+            print("Speech recognition could not understand audio")
+        except sr.RequestError as e:
+            print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+# Specify the path to the WAV file
+wav_file_path = "recording3.wav"
+
+# Convert speech to text
+result = speech_to_text(wav_file_path)
+
+if result:
+    print("Converted Text:")
+    print(result)
