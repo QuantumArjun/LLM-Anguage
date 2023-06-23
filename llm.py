@@ -4,6 +4,9 @@ from langchain.llms import OpenAI
 from langchain import PromptTemplate, FewShotPromptTemplate
 from langchain.chains import LLMChain
 from api import *
+import pyttsx3
+from gtts import gTTS
+import os
 
 class LLM:
     def __init__(self, model_name):
@@ -19,7 +22,7 @@ class LLM:
         input_variables = []
         chain_dict = {}
         
-        template += "You are helping me learn Spanish by simulating a conversation I will have with a employee of a particular establishment. In this case, I am ordering food from an Indian restaurant, and you are simulating a Spanish speaking worker. I will input the English I am speaking, and you will respond to me with the Hindi response (using the english alphabet). First, you will provide me a few available dishes at an Indian restaurant. Here is my English phrase: {user_text}"
+        template += "You are helping me learn Spanish by simulating a conversation I will have with a employee of a particular establishment. In this case, I am ordering food from an Indian restaurant, and you are simulating a Spanish speaking worker. I will input the English I am speaking, and you will respond to me with the Spanish response (using the english alphabet). First, you will provide me a few available dishes at an Indian restaurant. Here is my English phrase: {user_text}"
         
         chain_dict["user_text"] = user_text
         
@@ -40,3 +43,11 @@ if __name__ == "__main__":
     llm = LLM(model_name="openai")
     result = llm.respond("Hello, I would like to order some food.")
     print(result)
+
+    tts = gTTS(result)
+    tts.save("output.mp3")
+
+    # Play the generated speech
+    os.system("afplay output.mp3")  # macOS
+    
+

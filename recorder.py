@@ -4,21 +4,39 @@ import time
 import threading
 import tkinter as tk
 import pyaudio
+import pyttsx3
+from gtts import gTTS
+
 
 from speech2text import speech_to_text
+from llm import LLM
+
+SPANISH_LANG = {
+    "tts": 'es',
+    "prompt": 'Spanish'
+}
+
+HINDI_LANG = {
+    "tts": 'hi-In',
+    "prompt": 'English'
+}
 
 class VoiceRecorder:
 
     def __init__(self):
         self.root = tk.Tk()
         self.root.resizable(False, False)
-        self.button = tk.Button(self.root, text="Record", font=("Arial", 120, "bold"), command=self.click_handler)
+        self.message = tk.StringVar()
+        self.button = tk.Button(self.root, textvariable=self.message, font=("Arial", 120, "bold"), command=self.click_handler)
+        self.message.set("Record")
         self.button.pack()
         self.label = tk.Label(text="00:00:00")
         self.label.pack()
         self.recording = False
+        self.llm = LLM(model_name="openai")
+        self.language = SPANISH_LANG # change this
         self.root.mainloop()
-    
+        
 
     def click_handler(self):
         if self.recording:
@@ -66,9 +84,23 @@ class VoiceRecorder:
 
         response_text = speech_to_text(file_name)
 
-        print("hold up")
+        self.message.set(response_text)
 
-        self.button.config(text=response_text)
+        # call llm here
+        print(self.language)
+        result = self.llm.respond(response_text)
+        print(result)
+
+
+        self.message.set(result)
+
+        tts = gTTS(result)
+        tts.save("output.mp3")
+
+        # Play the generated speech
+        os.system("afplay output.mp3")  # macOS
+
+        return response_text
 
 
 VoiceRecorder()
