@@ -51,15 +51,7 @@ class VoiceRecorder:
         stream.close()
         audio.terminate()
 
-        exists = True
-        i = 1
-
-        file_name = f"recording{i}.wav"
-        while exists:
-            if os.path.exists(file_name):
-                i += 1  
-            else:
-                exists = False
+        file_name = "recording.wav"
         
         sound_file = wave.open(file_name, "wb")
         sound_file.setnchannels(1)
