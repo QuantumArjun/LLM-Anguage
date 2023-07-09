@@ -1,6 +1,6 @@
 import speech_recognition as sr
 
-def speech_to_text(file_path):
+def speech_to_text(file_path, language_enum):
     # Create a recognizer object
     recognizer = sr.Recognizer()
 
@@ -11,7 +11,7 @@ def speech_to_text(file_path):
 
         try:
             # Convert speech to text
-            text = recognizer.recognize_google(audio_data, language='hi-In')
+            text = recognizer.recognize_google(audio_data, language=language_enum['stt'])
             return text
         except sr.UnknownValueError:
             print("Speech recognition could not understand audio")

@@ -6,43 +6,43 @@ import tkinter as tk
 import pyaudio
 import pyttsx3
 from gtts import gTTS
+from language_enums import *
 
 
 from speech2text import speech_to_text
 from llm import LLM
 
-SPANISH_LANG = {
-    "tts": 'es',
-    "prompt": 'Spanish'
-}
-
-HINDI_LANG = {
-    "tts": 'hi-In',
-    "prompt": 'English'
-}
 
 '''
 Todo
+- Allow people to change the language 
 - Chain the continued responses together 
 - Better Prompt Engineering for the conversation itself 
-- UI Improvements
-- Allow people to change the language 
+- Remove the need to record and play a audio file 
 '''
 
 class GUI:
-    def __init__(self):
+    def __init__(self, language):
         
+        self.language_enum = self.get_language_enum(language)        
+
         #Initialize tkinter interface
         self.init_interface()
 
         # Initialized the LLM
-        self.llm = LLM(model_name="openai")
-
-        # Initialized the Language
-        self.language = HINDI_LANG # change this
+        self.llm = LLM(model_name="openai", language_enum=self.language_enum)
 
         # Begin the main game loop
         self.root.mainloop()
+
+    def get_language_enum(self, language):
+        language_enum = None
+        if language.lower() == 'hindi': language_enum = HINDI_LANG
+        elif language.lower() == 'spanish': language_enum = SPANISH_LANG
+        elif language.lower() == 'kannada': language_enum = KANNADA_LANG
+        elif language.lower() == 'telugu': language_enum = TELUGU_LANG
+        else: print(f"Language {language} not supported.")
+        return language_enum
     
     def init_interface(self):
         self.root = tk.Tk()
@@ -82,6 +82,11 @@ class GUI:
         self.chat_text.insert(tk.END, message + "\n")
         self.chat_text.see(tk.END)
         self.chat_text.config(state=tk.DISABLED)
+    
+    def reset_recording_UI(self):
+        self.record_button.config(text="Record")
+        self.record_button.config(fg="black")
+        self.time_label.config(text="00:00:00")
    
 
     def click_handler(self):
@@ -133,24 +138,27 @@ class GUI:
         # finish getting audio, file saved
         # call the transcription tool
         
-        response_text = speech_to_text(file_name)
+        response_text = speech_to_text(file_name, language_enum=self.language_enum)
 
         self.add_message(response_text)
 
         # call llm here
-        print(self.language)
         result = self.llm.respond(response_text)
         print(result)
 
-
         self.add_message(result)
 
-        tts = gTTS(result, lang='hi')
+        self.read_message(result)
+
+    def read_message(self, result):
+        tts = gTTS(result, lang=self.language_enum['tts'])
         tts.save("output.mp3")
+
+        self.reset_recording_UI()
 
         # Play the generated speech
         os.system("afplay output.mp3")  # macOS
 
 
 
-GUI()
+GUI(language="kannada")
