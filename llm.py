@@ -22,7 +22,7 @@ class LLM:
         input_variables = []
         chain_dict = {}
         
-        template += "You are helping me learn Spanish by simulating a conversation I will have with a employee of a particular establishment. In this case, I am ordering food from an Indian restaurant, and you are simulating a Spanish speaking worker. I will input the English I am speaking, and you will respond to me with the Spanish response (using the english alphabet). First, you will provide me a few available dishes at an Indian restaurant. Here is my English phrase: {user_text}"
+        template += "You are helping me learn Hindi by simulating a conversation I will have with a employee of a particular establishment. In this case, I am ordering food from an Indian restaurant, and you are simulating a Hindi speaking worker. I will input the English I am speaking, and you will respond to me with the Hindi response (using the english alphabet). First, you will provide me a few available dishes at an Indian restaurant. Here is my English phrase: {user_text}"
         
         chain_dict["user_text"] = user_text
         

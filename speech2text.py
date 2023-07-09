@@ -11,7 +11,7 @@ def speech_to_text(file_path):
 
         try:
             # Convert speech to text
-            text = recognizer.recognize_google(audio_data, language='es')
+            text = recognizer.recognize_google(audio_data, language='hi-In')
             return text
         except sr.UnknownValueError:
             print("Speech recognition could not understand audio")
