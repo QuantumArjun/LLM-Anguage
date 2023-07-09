@@ -34,7 +34,7 @@ class VoiceRecorder:
         self.label.pack()
         self.recording = False
         self.llm = LLM(model_name="openai")
-        self.language = SPANISH_LANG # change this
+        self.language = HINDI_LANG # change this
         self.root.mainloop()
         
 
