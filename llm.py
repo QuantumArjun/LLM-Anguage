@@ -18,16 +18,22 @@ class LLM:
 
         self.language = language_enum['name']
     
-    def respond(self, user_text):
+    def respond(self, user_text, history=None):
         template = ""
         input_variables = []
         chain_dict = {}
         
         template += f"You are helping me learn {self.language} by simulating a conversation I will have with a employee of a particular establishment. In this case, I am ordering food from an Indian restaurant, and you are simulating a {self.language} speaking worker. You will respond to me in the language {self.language}. Here is what I say to you:{{user_text}}"
+        if history is not None:
+            template += ". The conversation history is structured as a list of lists, in the following format. [[my response, your response],[my response, your response], [my response, your response]]. Here is the conversation so far:{{history}}"
+        template += f". Given the conversation history and my most recent response, please respond to me in the language {self.language}. Your response: "
         
+
         chain_dict["user_text"] = user_text
+        chain_dict["history"] = str(history)
         
         input_variables.append("user_text")
+        input_variables.append("history")
 
         prompt = PromptTemplate(
             input_variables=input_variables,

@@ -1,5 +1,8 @@
 #Files
 api.py
+*.wav
+*.mp3
+flagged/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
