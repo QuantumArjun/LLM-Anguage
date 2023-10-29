@@ -21,7 +21,9 @@ The app will consist of three AI agents.
 ## Usage
 
 ### 1. Environment
-``` pip install -r requirements.txt ```
+```
+pip install -r requirements.txt
+```
 
 ### 2. API Keys
 Please create a file in the main directory called `api.py`, and fill in the following details:
